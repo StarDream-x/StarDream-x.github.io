@@ -1,0 +1,385 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>UE4-FPS项目分析报告 | starDream's Blog!</title><meta name="keywords" content="CPP,UE4"><meta name="author" content="starDream"><meta name="copyright" content="starDream"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="UE4-FPS项目分析报告    零、项目背景&amp;emsp;&amp;emsp;暑假参与到了腾讯游戏学堂，当时的大作业也正是FPS游戏，本项目也正是那时接触到的一个酷炫且具有教学意义的UE4-FPS游戏开源项目。因此，借本次虚拟现实与可视化课程大作业机会，将从材质、特效、游戏逻辑等多方面分析该项目。我的相关配置如下：  软件配置：UE4.27源码版 硬件配置：i9-12900H，3070Ti，32G内存">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UE4-FPS项目分析报告">
+<meta property="og:url" content="http://stardream-x.github.io/2022/10/15/UE4-FPS%E9%A1%B9%E7%9B%AE%E5%88%86%E6%9E%90%E6%8A%A5%E5%91%8A/index.html">
+<meta property="og:site_name" content="starDream&#39;s Blog!">
+<meta property="og:description" content="UE4-FPS项目分析报告    零、项目背景&amp;emsp;&amp;emsp;暑假参与到了腾讯游戏学堂，当时的大作业也正是FPS游戏，本项目也正是那时接触到的一个酷炫且具有教学意义的UE4-FPS游戏开源项目。因此，借本次虚拟现实与可视化课程大作业机会，将从材质、特效、游戏逻辑等多方面分析该项目。我的相关配置如下：  软件配置：UE4.27源码版 硬件配置：i9-12900H，3070Ti，32G内存">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fp0.itc.cn%2Fimages01%2F20210127%2F1ceab375995447f0bed9cad32835bf50.jpeg&refer=http%3A%2F%2Fp0.itc.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1668425481&t=086ef0e74d4b9d49c87dde9206b58578">
+<meta property="article:published_time" content="2022-10-15T11:23:43.000Z">
+<meta property="article:modified_time" content="2022-10-16T11:27:38.321Z">
+<meta property="article:author" content="starDream">
+<meta property="article:tag" content="CPP">
+<meta property="article:tag" content="UE4">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fp0.itc.cn%2Fimages01%2F20210127%2F1ceab375995447f0bed9cad32835bf50.jpeg&refer=http%3A%2F%2Fp0.itc.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1668425481&t=086ef0e74d4b9d49c87dde9206b58578"><link rel="shortcut icon" href="/img/starDream.png"><link rel="canonical" href="http://stardream-x.github.io/2022/10/15/UE4-FPS%E9%A1%B9%E7%9B%AE%E5%88%86%E6%9E%90%E6%8A%A5%E5%91%8A/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'UE4-FPS项目分析报告',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-10-16 19:27:38'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://avatars.githubusercontent.com/u/97537940?s=400&amp;u=4f23ac10b665da4eadc29cf4b757ff08ede9d9ba&amp;v=4" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">11</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fp0.itc.cn%2Fimages01%2F20210127%2F1ceab375995447f0bed9cad32835bf50.jpeg&amp;refer=http%3A%2F%2Fp0.itc.cn&amp;app=2002&amp;size=f9999,10000&amp;q=a80&amp;n=0&amp;g=0n&amp;fmt=auto?sec=1668425481&amp;t=086ef0e74d4b9d49c87dde9206b58578')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">starDream's Blog!</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">UE4-FPS项目分析报告</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-10-15T11:23:43.000Z" title="发表于 2022-10-15 19:23:43">2022-10-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-10-16T11:27:38.321Z" title="更新于 2022-10-16 19:27:38">2022-10-16</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="UE4-FPS项目分析报告"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><center>
+<h1>UE4-FPS项目分析报告</h1>
+<!-- <h2>王新喆-2020302142180</h2> -->
+</center>
+
+<h2 id="零、项目背景"><a href="#零、项目背景" class="headerlink" title="零、项目背景"></a>零、项目背景</h2><p>&emsp;&emsp;暑假参与到了腾讯游戏学堂，当时的大作业也正是FPS游戏，本项目也正是那时接触到的一个酷炫且具有教学意义的UE4-FPS游戏开源项目。因此，借本次虚拟现实与可视化课程大作业机会，将从材质、特效、游戏逻辑等多方面分析该项目。我的相关配置如下：</p>
+<ul>
+<li>软件配置：UE4.27源码版</li>
+<li>硬件配置：i9-12900H，3070Ti，32G内存</li>
+</ul>
+<h2 id="一、关于本FPS游戏"><a href="#一、关于本FPS游戏" class="headerlink" title="一、关于本FPS游戏"></a>一、关于本FPS游戏</h2><h3 id="1-1-项目基本介绍"><a href="#1-1-项目基本介绍" class="headerlink" title="1.1 项目基本介绍"></a>1.1 项目基本介绍</h3><p>&emsp;&emsp;本项目基于GitHub上的开源FPS项目<a target="_blank" rel="noopener" href="https://github.com/tomlooman/EpicSurvivalGame">EpicSurvivalGame</a>。EpicSurvivalGame是由UE4开发的FPS游戏（主要使用C++，部分使用蓝图），最新更新面向于Ue4.27版本。开发者为TomLooman，曾于Stanford University教授《Game Development in C++ and Unreal Engine》课程。</p>
+<p>&emsp;&emsp;项目示意图如Figure 1所示。</p>
+<center>
+    <img src=https://camo.githubusercontent.com/c1a96631b45d5ebc8df31686d3c76501725fe0429e45793be062de38943abbb7/68747470733a2f2f7777772e746f6d6c6f6f6d616e2e636f6d2f77702d636f6e74656e742f75706c6f6164732f323032312f30312f737572766976616c67616d655f726566726573685f30352e6a7067 width="400">
+    <center>Figure 1</center>
+</center>
+
+
+<h3 id="1-2-游戏玩法"><a href="#1-2-游戏玩法" class="headerlink" title="1.2 游戏玩法"></a>1.2 游戏玩法</h3><p>&emsp;&emsp;游戏的设置背景为丧尸横行的乡间废弃小屋及其周边，丧尸会有限度的自动生成，玩家需要通过自身的移动躲避丧尸的攻击，并借由步枪射击丧尸或引爆炸弹的方式击杀丧尸以取得生存。除此之外，玩家本身具有血量值和饱腹值两大数值，血量值将因被丧尸攻击或饥饿而减少，饱腹值将随时间降低，但可通过进食散落于场景中的蛋糕恢复。</p>
+<p>&emsp;&emsp;游戏区分白天黑夜并随时间轮转，玩家最终得分将取决生存时间与击杀丧尸数量。游戏玩家运行的示意图如Figure 2所示。</p>
+<center>
+    <img src=https://raw.githubusercontent.com/StarDream-x/PhotoTab/main/fps_221016.png width="400">
+    <center>Figure 2</center>
+</center>
+
+<h3 id="1-3-玩家操作"><a href="#1-3-玩家操作" class="headerlink" title="1.3 玩家操作"></a>1.3 玩家操作</h3><p>&emsp;&emsp;玩家的基本操作如Form 1所示:</p>
+<style>
+.center 
+{
+  width: auto;/*表格宽度*/
+  display: table;
+  margin: auto;
+}
+</style>
+
+<!-- <div class="center"> -->
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">操作</th>
+<th style="text-align:center">效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">W/A/S/D</td>
+<td style="text-align:center">移动</td>
+</tr>
+<tr>
+<td style="text-align:center">W+leftShift</td>
+<td style="text-align:center">向前疾跑</td>
+</tr>
+<tr>
+<td style="text-align:center">Space</td>
+<td style="text-align:center">跳跃</td>
+</tr>
+<tr>
+<td style="text-align:center">C</td>
+<td style="text-align:center">下蹲</td>
+</tr>
+<tr>
+<td style="text-align:center">R</td>
+<td style="text-align:center">装填弹药</td>
+</tr>
+<tr>
+<td style="text-align:center">E</td>
+<td style="text-align:center">拾取物品</td>
+</tr>
+<tr>
+<td style="text-align:center">F</td>
+<td style="text-align:center">丢弃手持物品</td>
+</tr>
+<tr>
+<td style="text-align:center">Q</td>
+<td style="text-align:center">切换手持物品</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">切换武器1</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">切换武器2</td>
+</tr>
+<tr>
+<td style="text-align:center">Tab</td>
+<td style="text-align:center">打开提示页面</td>
+</tr>
+<tr>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">打开对话框</td>
+</tr>
+<tr>
+<td style="text-align:center">鼠标左键</td>
+<td style="text-align:center">开火/丢弃物体</td>
+</tr>
+<tr>
+<td style="text-align:center">鼠标右键</td>
+<td style="text-align:center">瞄准</td>
+</tr>
+<tr>
+<td style="text-align:center">鼠标中键</td>
+<td style="text-align:center">拿起物体</td>
+</tr>
+<tr>
+<td style="text-align:center">鼠标移动</td>
+<td style="text-align:center">拉动视角</td>
+</tr>
+</tbody>
+</table>
+</div>
+<center>Form 1</center>
+
+<!-- </div> -->
+<h2 id="二、游戏场景分析"><a href="#二、游戏场景分析" class="headerlink" title="二、游戏场景分析"></a>二、游戏场景分析</h2><p>&emsp;&emsp;在玩家的控制逻辑和丧尸的攻击逻辑之外，本项目包括含树、路障、房屋、石块、电线杆及基本地貌等，在此将以从简单到复杂的顺序（即上面枚举的倒叙）介绍这几大场景物件。</p>
+<h3 id="2-1-基本地貌"><a href="#2-1-基本地貌" class="headerlink" title="2.1 基本地貌"></a>2.1 基本地貌</h3><p>&emsp;&emsp;UE4提供了强大且便捷的地形操作工具，可以通过Modes-&gt;LandScape进入地形操作界面，相关的操作包含地形隆高、磨平以及制造盆地等，可视化程度极高。本项目的地形虽复杂，但在中心地形之外的场景只需要进行随机进行以上几类操作即可。在地形操作结束后，赋予本地形岩石材质即可得到类似于本项目的基本地貌。地貌如Figure 3所示</p>
+<center>
+    <img src=https://raw.githubusercontent.com/StarDream-x/PhotoTab/main/fpsLand_221016.png width="400">
+    <center>Figure 3</center>
+</center>
+
+<h3 id="2-2-电线杆"><a href="#2-2-电线杆" class="headerlink" title="2.2 电线杆"></a>2.2 电线杆</h3><p>&emsp;&emsp;这类物体的制作通常是用maya等3d工具制作静态网格体，再在UE中赋予对应材质即可。本项目的电线杆由基本杆、缠绕线以及直电线三种组成部分构成。基本杆部分的材质也是由传统的基本贴图、粗糙度以及法线贴图等构成。电线杆材质蓝图如Figure 4所示。</p>
+<center>
+    <img src=https://raw.githubusercontent.com/StarDream-x/PhotoTab/main/fpsMaterialElectric_221016.png width="400">
+    <center>Figure 4</center>
+</center>
+
+<h3 id="2-3-石块"><a href="#2-3-石块" class="headerlink" title="2.3 石块"></a>2.3 石块</h3><p>&emsp;&emsp;与电线杆同理，石块也是可以先用maya等3d工具制作静态网格体，再在UE中赋予材质即可。</p>
+<h3 id="2-4-房屋"><a href="#2-4-房屋" class="headerlink" title="2.4 房屋"></a>2.4 房屋</h3><p>&emsp;&emsp;同样是静态网格体，但包括屋顶、房梁以及房板三部分，因此用三个不同的材质进行贴图，整体并不复杂。原项目中的房屋为内部透明，这是因为材质未选择two sides,这会导致玩家进入房屋后的不真实感，因此可以将房屋三部分的材质均选中two sides以达到较为真实的效果。房屋外观如Figure 5所示。</p>
+<center>
+    <img src=https://raw.githubusercontent.com/StarDream-x/PhotoTab/main/fpsHouse_221016.png width="400">
+    <center>Figure 5</center>
+</center>
+
+<h3 id="2-5-路障"><a href="#2-5-路障" class="headerlink" title="2.5 路障"></a>2.5 路障</h3><p>&emsp;&emsp;继承自AStaticMeshActor，以便后续可以通过鼠标中键拿起。同时建立了关于丢弃时与其他物体碰撞发出声音的蓝图逻辑，声音大小与碰撞强度成正比。路障碰撞蓝图逻辑如Figure 6所示。</p>
+<center>
+    <img src=https://raw.githubusercontent.com/StarDream-x/PhotoTab/main/fpsBarrierBlueprint_221016.png width="400">
+    <center>Figure 6</center>
+</center>
+
+<h3 id="2-6-树"><a href="#2-6-树" class="headerlink" title="2.6 树"></a>2.6 树</h3><p>&emsp;&emsp;树的组成比较复杂，共由五种材质组成。在材质之外，因场景风的设置，本工程还设置了树中的树叶与细树枝随风飘动的细节。这个的实际实现也并不复杂，只需要在材质的蓝图中添加SpeedTree节点引入场景风影响世界坐标偏移，再以此影响树的晃动。但在实践操作中，直接引入该节点会出现树叶不动树干动的效果，因为几何类型为branch，需要修改为leaf即可，此外风类型需要修改为Best(默认为none)。材质蓝图含SpeedTree如Figure 7所示。</p>
+<center>
+    <img src=https://raw.githubusercontent.com/StarDream-x/PhotoTab/main/fpsSpeedTree_221016.png width="400">
+    <center>Figure 7</center>
+</center>
+
+<h2 id="三、游戏典型逻辑分析"><a href="#三、游戏典型逻辑分析" class="headerlink" title="三、游戏典型逻辑分析"></a>三、游戏典型逻辑分析</h2><h3 id="3-1-游戏输入"><a href="#3-1-游戏输入" class="headerlink" title="3.1 游戏输入"></a>3.1 游戏输入</h3><p>&emsp;&emsp;交互性是游戏最重要的特性之一，在UE中输入的绑定位置位于Edit-&gt;Project Setting-&gt;Engine-&gt;Input，分为行为映射与坐标映射两种，<strong>1.3</strong>中的各项操作就绑定于此。具体绑定方法为添加输入，定义输入名称，绑定对应输入操作（键盘/鼠标/游戏手柄）。特别的，对于坐标映射，还需要配置对应的移动参数，即移动步长。</p>
+<p>&emsp;&emsp;在上述GUI中的操作在一定程度上相当于“声明”了这样一些输入操作，但具体在C++内部还需要将其与对应方法相绑定，绑定方式即在玩家操控的Character的父类中调用<code>SetupPlayerInputComponent()</code>方法（这个方法源于Pawn类，在当前父类中覆写即可完成目标效果），再在其中通过形如<code>PlayerInputComponent-&gt;BindAxis(&quot;MoveForward&quot;, this, &amp;ASCharacter::MoveForward);</code>将输入名称（例如此处为MoveForward）与对应方法（此处为ASCharacter::MoveForward）绑定。由此以来，进行对应输入就会调用相应的方法，执行对应的逻辑，从而使游戏顺利进行。</p>
+<p>&emsp;&emsp;这里以玩家移动逻辑为例介绍本项目的游戏交互实现。在前面已经通过GUI绑定和覆写的内置方法<code>SetupPlayerInputComponent()</code>绑定了输入与方法，所以之后要做的就是在方法中实现对应的逻辑。这里以玩家移动逻辑为例，介绍本项目中的输入逻辑实现。</p>
+<p>&emsp;&emsp;玩家移动中，前后移动（W/S）绑定了<code>MoveForward</code>方法，左右移动（A/D）绑定了<code>MoveRight</code>方法。在坐标映射中配置的移动步长（默认为1.0f），会以形参（例如Val）的形式传入这些方法。再在这些方法中先通过<code>FRotationMatrix(GetActorRotation()).GetScaledAxis(EAxis::X/Y)</code>获得移动方向向量，最后调用Pawn中内置方法<code>AddMovementInput(Direction, Val)</code>即可完成移动逻辑。</p>
+<h3 id="3-2-游戏角色基本类"><a href="#3-2-游戏角色基本类" class="headerlink" title="3.2 游戏角色基本类"></a>3.2 游戏角色基本类</h3><p>&emsp;&emsp;无论是游戏还是应用类的各种工程，大多基于面向对象的思想，本工程也不例外。由于玩家角色与丧尸的基本性质类似，如血量、移动、承伤、死亡等逻辑。所以在本工程中，他们都继承自父类<code>ASBaseCharacter</code>(此处首字母A为ue所要求标注的基本父类Actor)。</p>
+<p>&emsp;&emsp;父类<code>ASBaseCharacter</code>中首先定义了与上述各逻辑相关的基本属性，而后实现了其对应的方法，以下是其中的典型属性与方法：</p>
+<ul>
+<li><code>Health</code>。血量属性，记录玩家或丧尸的血量。相应的配置有get、getMax等方法。</li>
+<li><code>SprintingSpeedModifier</code>。疾跑属性，玩家疾跑或丧尸发现玩家时提升移动速度倍率。</li>
+<li><code>TakeDamage</code>。承伤方法，对应玩家或丧尸受到攻击。内部调用受击方法以播放特效与音效，血量小于等于0时调用死亡方法。</li>
+<li><code>OnDeath</code>。死亡清理方法，死亡方法中调用的重要清理方法，用于玩家/丧尸死亡时播放相应特效、设置非碰撞、调用内置方法清楚对象等。</li>
+</ul>
+<h3 id="3-3-玩家类"><a href="#3-3-玩家类" class="headerlink" title="3.3 玩家类"></a>3.3 玩家类</h3><p>&emsp;&emsp;在本工程中，玩家对象为蓝图类，但蓝图中只实现了受击时的窗口晃动特效，具体的各项实现都在继承的父类<code>ASCharacter</code>（继承自游戏角色基本类<code>ASBaseCharacter</code>）中实现。除了在<strong>3.1</strong>中介绍的输入配置外，<code>ASCharacter</code>中还有着以下重要属性与方法：</p>
+<ul>
+<li><code>Hunger</code>。饥饿度，系统自动调用在<code>GetWorldTimerManager().SetTimer</code>绑定的<code>IncrementHunger</code>方法随时间增加饥饿度，饥饿度大于阈值时触发伤害。</li>
+<li><code>Inventory</code>。装备集合，可装备手电筒和枪械，通过<code>SetCurrentWeapon</code>方法进行装备操作，<code>DropWeapon</code>方法进行卸除操作。</li>
+<li><code>Tick</code>。每帧调用的方法，在其中根据之前的操作每帧更新玩家的状态，如冲刺、转向等。</li>
+<li><code>MakePawnNoise</code>。发声方法，通过配置的声音调用父类<code>Actor</code>的<code>MakePawnNoise</code>方法发出声音。</li>
+</ul>
+<h3 id="3-4-僵尸AI类"><a href="#3-4-僵尸AI类" class="headerlink" title="3.4 僵尸AI类"></a>3.4 僵尸AI类</h3><p>&emsp;&emsp;僵尸AI主要由<code>ASZombieCharacter</code>与<code>ASZombieAIController</code>两个类控制，前者负责僵尸的基本逻辑，继承自游戏基本角色类，后者负责僵尸AI的寻路。寻路的逻辑比较简单，在未发现玩家时沿着预设路径点进行反复寻路，发现时向玩家疾走。</p>
+<p>&emsp;&emsp;<code>ASZombieCharacter</code>的典型逻辑属性与方法如下：</p>
+<ul>
+<li><code>OnSeePlayer</code>。视觉发现玩家方法，玩家进入其视觉范围时调用，内部再调用<code>SetTargetEnemy</code>设置目标，同时调用行为树（BehaviorTree）组件改变僵尸行为。行为树组件如Figure 8所示。</li>
+<li><code>OnHearNoise</code>。听觉发现玩家方法，玩家行为如开枪、行走发出声音被其感知时调用，其余操作同<code>OnSeePlayer</code>方法。</li>
+<li><code>PerformMeleeStrike</code>。攻击方法，接近玩家时调用，获取玩家对象后调用玩家类的<code>TakeDamage</code>进行攻击。</li>
+<li><code>BroadcastUpdateAudioLoop_Implementation</code>。播放丧尸声音方法，丧尸会在空闲与发现玩家时发出不同的声音。</li>
+</ul>
+<center>
+    <img src=https://raw.githubusercontent.com/StarDream-x/PhotoTab/main/fpsAIBt_221016.png width="400">
+    <center>Figure 8</center>
+</center>
+
+<h3 id="3-5-其他类简介"><a href="#3-5-其他类简介" class="headerlink" title="3.5 其他类简介"></a>3.5 其他类简介</h3><p>&emsp;&emsp;除了前面所提到的主要逻辑，本工程中还有着相当数量的简单却负责着一定功能的类，在这里简单介绍如下几类：</p>
+<ol>
+<li><code>USCarryObjectComponent</code>（首字母U为ue所要求标注的基本父类Object）。可拾取物件类，负责可鼠标中键拾取物件，包括路障、枪械、手电等的拾取与丢弃操作。</li>
+<li><code>ASHUD</code>。HUD类，负责显示游戏状态如血量、饥饿度、所得分数等数据。</li>
+<li><code>ASBombActor</code>。炸弹类，负责炸弹爆炸（手动引爆与受击引爆）及其引爆后效果的逻辑。</li>
+<li><code>ASConsumableActor</code>。消耗品类，本工程中指蛋糕，可被食用后恢复食用者的饥饿度与血量。</li>
+<li><code>ASFlashlight</code>。手电类，负责手电开关的逻辑。</li>
+<li><code>ASWeapon</code>。武器类，负责武器开火、装弹等逻辑。</li>
+</ol>
+<h2 id="四、学习体会"><a href="#四、学习体会" class="headerlink" title="四、学习体会"></a>四、学习体会</h2><p>&emsp;&emsp;通过unreal的整体学习，我深切的理解了含unreal在内的虚拟现实软件项目的搭建是一个系统学科，它涵盖了我们计算机科学与技术专业的许多知识：强大的材质系统，含基本贴图、法线贴图在内的计算机图形学应用；便捷的网络编程，帧同步与网络同步等计算机网络应用；复杂大规模实物模拟，如FFT生成江河湖海的算法设计应用等。</p>
+<p>&emsp;&emsp;但以上所有知识的成功运用都基于强大的项目工程能力，这也是本次虚拟现实与可视化课程大作业的目的所在，即通过学习本工程和编写或修改其中的部分配置与代码提升我的工程能力。选择unreal项目的原因在于，对比已经有一定熟练度的unity，unreal不仅亟待进一步学习，而且其整个引擎就是一个开源的C++工程，学习并使用unreal的源码版使我能够更加方便灵活的修改其中的部分配置并了解引擎的各项功能，提升我的项目整体感。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://stardream-x.github.io">starDream</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://stardream-x.github.io/2022/10/15/UE4-FPS%E9%A1%B9%E7%9B%AE%E5%88%86%E6%9E%90%E6%8A%A5%E5%91%8A/">http://stardream-x.github.io/2022/10/15/UE4-FPS%E9%A1%B9%E7%9B%AE%E5%88%86%E6%9E%90%E6%8A%A5%E5%91%8A/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://stardream-x.github.io" target="_blank">starDream's Blog!</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/CPP/">CPP</a><a class="post-meta__tags" href="/tags/UE4/">UE4</a></div><div class="post_share"><div class="social-share" data-image="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fp0.itc.cn%2Fimages01%2F20210127%2F1ceab375995447f0bed9cad32835bf50.jpeg&amp;refer=http%3A%2F%2Fp0.itc.cn&amp;app=2002&amp;size=f9999,10000&amp;q=a80&amp;n=0&amp;g=0n&amp;fmt=auto?sec=1668425481&amp;t=086ef0e74d4b9d49c87dde9206b58578" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/10/22/GA-and-Improvements/"><img class="prev-cover" src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fspider.nosdn.127.net%2F72ebcd90933d092d604f54901dd0a49d.jpeg&amp;refer=http%3A%2F%2Fspider.nosdn.127.net&amp;app=2002&amp;size=f9999,10000&amp;q=a80&amp;n=0&amp;g=0n&amp;fmt=auto?sec=1669053287&amp;t=1d7ab478a50c758644202f38cd53615d" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">GA and Improvements</div></div></a></div><div class="next-post pull-right"><a href="/2022/10/13/JavaEEnote4/"><img class="next-cover" src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg-blog.csdnimg.cn%2Fimg_convert%2F6ee918ee96e7cde5c0ff80528c44df88.png&amp;refer=http%3A%2F%2Fimg-blog.csdnimg.cn&amp;app=2002&amp;size=f9999,10000&amp;q=a80&amp;n=0&amp;g=0n&amp;fmt=auto?sec=1668186790&amp;t=cb3b17e2b392903f44c08db698428954" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">JavaEEnote4</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/09/24/LCCUP22-%E9%A2%98%E8%A7%A3%E6%8A%A5%E5%91%8A/" title="LCCUP22-题解报告"><img class="cover" src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fddrvcn.oss-cn-hangzhou.aliyuncs.com%2F2019%2F4%2F6zu6Vf.jpeg&refer=http%3A%2F%2Fddrvcn.oss-cn-hangzhou.aliyuncs.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1666626933&t=f109177ab8b5c135083a42d0dffc82f0" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-09-24</div><div class="title">LCCUP22-题解报告</div></div></a></div><div><a href="/2022/09/16/acmTemplate/" title="acmTemplate"><img class="cover" src="/img/icpc.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-09-16</div><div class="title">acmTemplate</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://avatars.githubusercontent.com/u/97537940?s=400&amp;u=4f23ac10b665da4eadc29cf4b757ff08ede9d9ba&amp;v=4" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">starDream</div><div class="author-info__description">A BRAND NEW BLOG</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">11</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/StarDream-x"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">All pictures inside posts have been removed to github, thus you need to make sure that you can be access to github if you want to see them.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">UE4-FPS项目分析报告</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9B%B6%E3%80%81%E9%A1%B9%E7%9B%AE%E8%83%8C%E6%99%AF"><span class="toc-number">1.1.</span> <span class="toc-text">零、项目背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%85%B3%E4%BA%8E%E6%9C%ACFPS%E6%B8%B8%E6%88%8F"><span class="toc-number">1.2.</span> <span class="toc-text">一、关于本FPS游戏</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E9%A1%B9%E7%9B%AE%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.2.1.</span> <span class="toc-text">1.1 项目基本介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E6%B8%B8%E6%88%8F%E7%8E%A9%E6%B3%95"><span class="toc-number">1.2.2.</span> <span class="toc-text">1.2 游戏玩法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E7%8E%A9%E5%AE%B6%E6%93%8D%E4%BD%9C"><span class="toc-number">1.2.3.</span> <span class="toc-text">1.3 玩家操作</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%B8%B8%E6%88%8F%E5%9C%BA%E6%99%AF%E5%88%86%E6%9E%90"><span class="toc-number">1.3.</span> <span class="toc-text">二、游戏场景分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%9F%BA%E6%9C%AC%E5%9C%B0%E8%B2%8C"><span class="toc-number">1.3.1.</span> <span class="toc-text">2.1 基本地貌</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E7%94%B5%E7%BA%BF%E6%9D%86"><span class="toc-number">1.3.2.</span> <span class="toc-text">2.2 电线杆</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E7%9F%B3%E5%9D%97"><span class="toc-number">1.3.3.</span> <span class="toc-text">2.3 石块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E6%88%BF%E5%B1%8B"><span class="toc-number">1.3.4.</span> <span class="toc-text">2.4 房屋</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-%E8%B7%AF%E9%9A%9C"><span class="toc-number">1.3.5.</span> <span class="toc-text">2.5 路障</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-%E6%A0%91"><span class="toc-number">1.3.6.</span> <span class="toc-text">2.6 树</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%B8%B8%E6%88%8F%E5%85%B8%E5%9E%8B%E9%80%BB%E8%BE%91%E5%88%86%E6%9E%90"><span class="toc-number">1.4.</span> <span class="toc-text">三、游戏典型逻辑分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E6%B8%B8%E6%88%8F%E8%BE%93%E5%85%A5"><span class="toc-number">1.4.1.</span> <span class="toc-text">3.1 游戏输入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E6%B8%B8%E6%88%8F%E8%A7%92%E8%89%B2%E5%9F%BA%E6%9C%AC%E7%B1%BB"><span class="toc-number">1.4.2.</span> <span class="toc-text">3.2 游戏角色基本类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E7%8E%A9%E5%AE%B6%E7%B1%BB"><span class="toc-number">1.4.3.</span> <span class="toc-text">3.3 玩家类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E5%83%B5%E5%B0%B8AI%E7%B1%BB"><span class="toc-number">1.4.4.</span> <span class="toc-text">3.4 僵尸AI类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-%E5%85%B6%E4%BB%96%E7%B1%BB%E7%AE%80%E4%BB%8B"><span class="toc-number">1.4.5.</span> <span class="toc-text">3.5 其他类简介</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%AD%A6%E4%B9%A0%E4%BD%93%E4%BC%9A"><span class="toc-number">1.5.</span> <span class="toc-text">四、学习体会</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/10/22/GA-and-Improvements/" title="GA and Improvements"><img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fspider.nosdn.127.net%2F72ebcd90933d092d604f54901dd0a49d.jpeg&amp;refer=http%3A%2F%2Fspider.nosdn.127.net&amp;app=2002&amp;size=f9999,10000&amp;q=a80&amp;n=0&amp;g=0n&amp;fmt=auto?sec=1669053287&amp;t=1d7ab478a50c758644202f38cd53615d" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="GA and Improvements"/></a><div class="content"><a class="title" href="/2022/10/22/GA-and-Improvements/" title="GA and Improvements">GA and Improvements</a><time datetime="2022-10-22T13:03:19.000Z" title="发表于 2022-10-22 21:03:19">2022-10-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/15/UE4-FPS%E9%A1%B9%E7%9B%AE%E5%88%86%E6%9E%90%E6%8A%A5%E5%91%8A/" title="UE4-FPS项目分析报告"><img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fp0.itc.cn%2Fimages01%2F20210127%2F1ceab375995447f0bed9cad32835bf50.jpeg&amp;refer=http%3A%2F%2Fp0.itc.cn&amp;app=2002&amp;size=f9999,10000&amp;q=a80&amp;n=0&amp;g=0n&amp;fmt=auto?sec=1668425481&amp;t=086ef0e74d4b9d49c87dde9206b58578" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="UE4-FPS项目分析报告"/></a><div class="content"><a class="title" href="/2022/10/15/UE4-FPS%E9%A1%B9%E7%9B%AE%E5%88%86%E6%9E%90%E6%8A%A5%E5%91%8A/" title="UE4-FPS项目分析报告">UE4-FPS项目分析报告</a><time datetime="2022-10-15T11:23:43.000Z" title="发表于 2022-10-15 19:23:43">2022-10-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/13/JavaEEnote4/" title="JavaEEnote4"><img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg-blog.csdnimg.cn%2Fimg_convert%2F6ee918ee96e7cde5c0ff80528c44df88.png&amp;refer=http%3A%2F%2Fimg-blog.csdnimg.cn&amp;app=2002&amp;size=f9999,10000&amp;q=a80&amp;n=0&amp;g=0n&amp;fmt=auto?sec=1668186790&amp;t=cb3b17e2b392903f44c08db698428954" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="JavaEEnote4"/></a><div class="content"><a class="title" href="/2022/10/13/JavaEEnote4/" title="JavaEEnote4">JavaEEnote4</a><time datetime="2022-10-12T17:03:27.000Z" title="发表于 2022-10-13 01:03:27">2022-10-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/04/ChineseChess-by-Unity/" title="ChineseChess by Unity"><img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fbkimg.cdn.bcebos.com%2Fpic%2F9213b07eca8065386a75938197dda144ac348280&amp;refer=http%3A%2F%2Fbkimg.cdn.bcebos.com&amp;app=2002&amp;size=f9999,10000&amp;q=a80&amp;n=0&amp;g=0n&amp;fmt=auto?sec=1667406277&amp;t=52a28fa1328f8495e0f3946247c054fb" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ChineseChess by Unity"/></a><div class="content"><a class="title" href="/2022/10/04/ChineseChess-by-Unity/" title="ChineseChess by Unity">ChineseChess by Unity</a><time datetime="2022-10-03T16:20:02.000Z" title="发表于 2022-10-04 00:20:02">2022-10-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/09/27/JavaEEnote3/" title="JavaEEnote3"><img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fstatic001.geekbang.org%2Finfoq%2F61%2F61d6ac3bd736f6dd270b578f2d62423e.jpeg&amp;refer=http%3A%2F%2Fstatic001.geekbang.org&amp;app=2002&amp;size=f9999,10000&amp;q=a80&amp;n=0&amp;g=0n&amp;fmt=auto?sec=1666803814&amp;t=81b757e2a80a2c6ce36f7dfd85d6ed1f" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="JavaEEnote3"/></a><div class="content"><a class="title" href="/2022/09/27/JavaEEnote3/" title="JavaEEnote3">JavaEEnote3</a><time datetime="2022-09-26T17:01:22.000Z" title="发表于 2022-09-27 01:01:22">2022-09-27</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By starDream</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.2
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container:not\([display]\)').forEach(node => {
+            const target = node.parentNode
+            if (target.nodeName.toLowerCase() === 'li') {
+              target.parentNode.classList.add('has-jax')
+            } else {
+              target.classList.add('has-jax')
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js"></script><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', { class: 'katex-wrap'})
+  })
+})()</script></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>

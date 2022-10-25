@@ -1,0 +1,265 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>ChineseChess by Unity | starDream's Blog!</title><meta name="keywords" content="Unity,Alpha-beta pruning,CSharp"><meta name="author" content="starDream"><meta name="copyright" content="starDream"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="中国象棋博弈程序的实现    零、关于本中国象棋博弈程序&amp;emsp;&amp;emsp;笔者在学习了AI课程的相关知识及网上相关的资源后，从零开始使用unity及C#基于alpha-beta剪枝思想编写并调试了本中国象棋博弈程序的全部代码与UI控件。使用unity编写的优点在于易于扩展，无论是转向MCTS博弈或添加悔棋退出等控件都十分便利，ui示意图见Figure 1。相关仓库并未开源，如需要请联系59">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ChineseChess by Unity">
+<meta property="og:url" content="http://stardream-x.github.io/2022/10/04/ChineseChess-by-Unity/index.html">
+<meta property="og:site_name" content="starDream&#39;s Blog!">
+<meta property="og:description" content="中国象棋博弈程序的实现    零、关于本中国象棋博弈程序&amp;emsp;&amp;emsp;笔者在学习了AI课程的相关知识及网上相关的资源后，从零开始使用unity及C#基于alpha-beta剪枝思想编写并调试了本中国象棋博弈程序的全部代码与UI控件。使用unity编写的优点在于易于扩展，无论是转向MCTS博弈或添加悔棋退出等控件都十分便利，ui示意图见Figure 1。相关仓库并未开源，如需要请联系59">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fbkimg.cdn.bcebos.com%2Fpic%2F9213b07eca8065386a75938197dda144ac348280&refer=http%3A%2F%2Fbkimg.cdn.bcebos.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1667406277&t=52a28fa1328f8495e0f3946247c054fb">
+<meta property="article:published_time" content="2022-10-03T16:20:02.000Z">
+<meta property="article:modified_time" content="2022-10-05T06:29:45.730Z">
+<meta property="article:author" content="starDream">
+<meta property="article:tag" content="Unity">
+<meta property="article:tag" content="Alpha-beta pruning">
+<meta property="article:tag" content="CSharp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fbkimg.cdn.bcebos.com%2Fpic%2F9213b07eca8065386a75938197dda144ac348280&refer=http%3A%2F%2Fbkimg.cdn.bcebos.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1667406277&t=52a28fa1328f8495e0f3946247c054fb"><link rel="shortcut icon" href="/img/starDream.png"><link rel="canonical" href="http://stardream-x.github.io/2022/10/04/ChineseChess-by-Unity/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'ChineseChess by Unity',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-10-05 14:29:45'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://avatars.githubusercontent.com/u/97537940?s=400&amp;u=4f23ac10b665da4eadc29cf4b757ff08ede9d9ba&amp;v=4" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">11</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fbkimg.cdn.bcebos.com%2Fpic%2F9213b07eca8065386a75938197dda144ac348280&amp;refer=http%3A%2F%2Fbkimg.cdn.bcebos.com&amp;app=2002&amp;size=f9999,10000&amp;q=a80&amp;n=0&amp;g=0n&amp;fmt=auto?sec=1667406277&amp;t=52a28fa1328f8495e0f3946247c054fb')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">starDream's Blog!</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">ChineseChess by Unity</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-10-03T16:20:02.000Z" title="发表于 2022-10-04 00:20:02">2022-10-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-10-05T06:29:45.730Z" title="更新于 2022-10-05 14:29:45">2022-10-05</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="ChineseChess by Unity"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><center>
+<h1>中国象棋博弈程序的实现</h1>
+<!-- <h2>王新喆-2020302142180</h2> -->
+</center>
+
+<h2 id="零、关于本中国象棋博弈程序"><a href="#零、关于本中国象棋博弈程序" class="headerlink" title="零、关于本中国象棋博弈程序"></a>零、关于本中国象棋博弈程序</h2><p>&emsp;&emsp;笔者在学习了AI课程的相关知识及网上相关的资源后，从零开始使用unity及C#基于alpha-beta剪枝思想编写并调试了本中国象棋博弈程序的全部代码与UI控件。使用unity编写的优点在于易于扩展，无论是转向MCTS博弈或添加悔棋退出等控件都十分便利，ui示意图见Figure 1。相关仓库并未开源，如需要请联系591121778@qq.com。</p>
+<p>&emsp;&emsp;在本文的最后将给出minimax及alpha-beta剪枝部分代码。</p>
+<center>
+    <img src=https://raw.githubusercontent.com/StarDream-x/PhotoTab/main/UIDemo_221004.png width="400">
+    <center>Figure 1</center>
+</center>
+
+<!-- /img/Alice.jpg -->
+<!-- /img/ChineseChessByUnity/UIDemo.png -->
+<h2 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h2><h3 id="1-1-中国象棋博弈程序开发意义"><a href="#1-1-中国象棋博弈程序开发意义" class="headerlink" title="1.1 中国象棋博弈程序开发意义"></a>1.1 中国象棋博弈程序开发意义</h3><p>&emsp;&emsp;与其他各种游戏的博弈程序或算法相似，中国象棋博弈程序的开发意义不在于让计算机与人进行下棋、打牌之类的游戏，而是通过对它的研究来检验人工智能技术在中国象棋博弈这一领域能否达到对人类智能的模拟，从而促进对人工智能技术的深一步探究。</p>
+<h3 id="1-2-中国象棋博弈程序开发现状"><a href="#1-2-中国象棋博弈程序开发现状" class="headerlink" title="1.2 中国象棋博弈程序开发现状"></a>1.2 中国象棋博弈程序开发现状</h3><p>&emsp;&emsp;正如我们所看到的那样，国际象棋领域的DeepBlue早在上世纪末就打败了当时的国际象棋世界冠军[1]；围棋领域的AlphaGo也在2016年击败围棋大师李世石[2]。棋类博弈看似已经是一项相当成熟技术，但我们回首中国象棋领域，可以发现其中的研究实际上并没有上述二者的全面，开源项目更是寥寥。比较著名的开源项目基本上是基于alpha go/zero而非alpha-beta pruning，且应用技术集中于python、QT/C++、typescript等[3]。</p>
+<h3 id="1-3-本博弈程序的开发背景"><a href="#1-3-本博弈程序的开发背景" class="headerlink" title="1.3 本博弈程序的开发背景"></a>1.3 本博弈程序的开发背景</h3><p>&emsp;&emsp;本中国象棋博弈程序的实现基于AI课程作业，综合考虑现有网络开源项目研究情况，在此实现了基于unity/C#以及alpha-beta pruning的中国象棋博弈程序。本程序的开发利用课程中所讲授的alpha-beta剪枝思想，但具体棋局评价函数由笔者综合个人棋局经验及相关资料分为棋力与控制力两部分。本中国象棋博弈程序已经验证具有一定的强度[4]。</p>
+<p>&emsp;&emsp;关于MCTS,在alpha go/zero中，为了更快的达到最优解以减少搜索空间，我们有如下的UCT公式：</p>
+<script type="math/tex; mode=display">\mathbb{UCT}(v_i, v) = \frac{Q(v_i)}{N(v_i)} + c P(v, v_i) \frac{\sqrt{N(v)}}{1 + N(v_i)}\</script><p>&emsp;&emsp;上式相较于传统MCTS公式有一处明显不同，即多出P(v,vi)项，该项意义为从v至vi状态的转移概率，由神经网络导出。由于作业要求的时间有限和alpha-beta剪枝已具有一定强度，本博弈程序并没有使用MCTS[5]。</p>
+<h2 id="二、中国象棋博弈程序的基本原理"><a href="#二、中国象棋博弈程序的基本原理" class="headerlink" title="二、中国象棋博弈程序的基本原理"></a>二、中国象棋博弈程序的基本原理</h2><h3 id="2-1-中国象棋下棋思维"><a href="#2-1-中国象棋下棋思维" class="headerlink" title="2.1 中国象棋下棋思维"></a>2.1 中国象棋下棋思维</h3><p>&emsp;&emsp;中国象棋红黑双方各有1帅/将、2士、2相/象、2马、2车、2炮、5兵/卒，每种棋子有其独有的移动规则，如马走日、象走田、蹩马腿、堵象眼等，这也决定了每种棋子的价值不同，如移动范围最大限制最小的车价值较高。但游戏的规则是率先吃掉对面将/帅的一方获胜，同时结合相关棋力资料，所以我们可以给予棋力排行如下：帅/将&gt;车&gt;炮&gt;马&gt;相/象&gt;士&gt;兵/卒。</p>
+<p>&emsp;&emsp;当然，下棋是动态的过程，所以棋子所控制的位置也需要给予考虑，如车控制着其所在十字上所有与其无间隔棋子的位置，控制位置越多，我们可以认为其位置价值越高。</p>
+<h3 id="2-2-中国象棋博弈的表示"><a href="#2-2-中国象棋博弈的表示" class="headerlink" title="2.2 中国象棋博弈的表示"></a>2.2 中国象棋博弈的表示</h3><p>&emsp;&emsp;我们可以将整张棋盘看作一个棋子列表，每个棋子可以为空（type=0）或为任意种类的棋子（如士type=2、车type=6、将\帅type=7），以及其归属方（bel，红0黑1），每个棋子在棋子列表中对应棋盘上的一个合法位置。由此博弈的过程就是移动棋子，使合法的目的棋盘点赋值为棋子所对应type及bel，而原棋盘点此二者归零的过程。博弈的结果即为棋盘上type=7的点有且仅有一处。特别的，为了便于ui表示，对每一个棋盘点添加ck变量表示是否选中（true中false否）。</p>
+<h3 id="2-3-中国象棋博弈程序的核心思想"><a href="#2-3-中国象棋博弈程序的核心思想" class="headerlink" title="2.3 中国象棋博弈程序的核心思想"></a>2.3 中国象棋博弈程序的核心思想</h3><p>&emsp;&emsp;本中国象棋博弈程序是通过minimax+alpha-beta pruning算法制作的，所以其核心思想就自然在于棋局评估函数的选择上。本中国象棋博弈程序的棋局评估函数主要由以下两部分组成：</p>
+<ol>
+<li>棋力评估。由前面下棋思维部分，我们已经得出了棋力排序为：帅/将&gt;车&gt;炮&gt;马&gt;相/象&gt;士&gt;兵/卒。我们可以分别统计红黑两方的棋力，即简单地不同种棋子不同权值进行加权，这里综合相关资料得出不同种棋子的起立值为{1e6,1800,1500,800,500,500,150}。综上对于棋局评估函数，棋力部分的贡献可以计算为(红方棋力-黑方棋力)。</li>
+<li>控制力评估。棋子的控制力，可理解为其可一步吃的棋盘格点数。对于除炮外棋子，其控制范围为其一步所能移动到的位置，炮单独计算即可。对于暂时无敌方棋子的位置，即空格点，控制其的价值有限，不应超过棋子的棋力，可设置为{1}。对于有敌方棋子的位置，意味着当前棋子一步可吃掉对方棋子，但往往对方可以移动棋子避免被吃，所以控制力应高于空白点但低于对应棋力值，且应随对应敌方棋子的种类变化。综合以上策略，该部分的控制力可设置为敌方被控点位棋力值的平方根并乘以轮次权重（执棋者权重较高），由此控制力部分的贡献可以计算为(红方控制力-黑方控制力)。</li>
+</ol>
+<p>&emsp;&emsp;综上，本国际象棋博弈程序的棋局评估函数为</p>
+<script type="math/tex; mode=display">棋局价值=棋力+控制力</script><script type="math/tex; mode=display">棋力=红方棋力-黑方棋力</script><script type="math/tex; mode=display">控制力=红方控制力-黑方控制力</script><h2 id="三、中国象棋博弈算法的实现"><a href="#三、中国象棋博弈算法的实现" class="headerlink" title="三、中国象棋博弈算法的实现"></a>三、中国象棋博弈算法的实现</h2><h3 id="3-1-UI实现"><a href="#3-1-UI实现" class="headerlink" title="3.1 UI实现"></a>3.1 UI实现</h3><p>&emsp;&emsp;借助unity2d方便的canvas工具在ui界面上分别进行背景贴图和棋盘贴图后，再将棋盘上每个格点放置一个棋子prefab（默认透明）。游戏初始化时，调用初始化棋盘方法将棋盘格点进行赋值，即棋盘初始状态，而后调用棋盘更新方法，进行棋局ui更新。</p>
+<h3 id="3-2-下棋逻辑实现"><a href="#3-2-下棋逻辑实现" class="headerlink" title="3.2 下棋逻辑实现"></a>3.2 下棋逻辑实现</h3><p>&emsp;&emsp;这里的下棋者可以通过相应属性调整为玩家或AI，玩家可以通过鼠标左键点击选择棋子，右键确认下棋点的方式下棋，而AI下棋逻辑为调取整张棋盘分析后返回其下棋后的棋盘状态。二者下棋都需要遵循中国象棋的规则（参见2.1部分），即通过编写有效棋步方法来确认某一棋步的有效性，以及调用棋局分析方法获得当前所有棋子的可行下一步格点。当下棋有效时进行轮次增加，棋手轮转。</p>
+<h3 id="3-3-AI实现"><a href="#3-3-AI实现" class="headerlink" title="3.3 AI实现"></a>3.3 AI实现</h3><p>&emsp;&emsp;本象棋博弈程序的AI实现思路是使用minimax+alpha-beta剪枝策略，分别实现策略如下：</p>
+<ol>
+<li><p>minimax: 本策略实质上为博弈树搜索的朴素策略，即最大化自己收益、最小化对手收益。因此通过棋盘评价函数得到红方收益与黑方收益之差时，若在红方轮则选择使收益最大的节点，而在黑方轮则选择使收益最小的节点。二者交替进行直到游戏结束或达搜索深度上限，棋局评价将发生于这些节点，而这些节点的结果也将根据前面所提到的minimax策略向上传送至父亲节点，最终当前的决策节点将根据子节点权重选择最有利于自己的策略。</p>
+</li>
+<li><p>alpha-beta pruning: 该策略是针对minimax策略的优化，因为minimax策略会根据搜索深度上限搜索所有能到达的节点，而显然其中有些节点是不必要搜索的。alpha-beta剪枝策略目的就是剪除其中两种不必要搜索节点。</p>
+<ul>
+<li>alpha pruning：实现中，对于max层，可以将当前最大子节点的权值作为参数（β）传递入新子节点的遍历中。由于新子节点为min层，所以当搜索得到其子节点（即新子节点的子节点，max层）时，若该子节点的权值（α）小于β时，就没有必要继续搜索其他子节点了，因为当前为min层，返回值不可能大于α，即小于β，也因而不会对父节点做贡献。</li>
+<li>beta pruning：与alpha剪枝相反，当父节点传入新子节点遍历的参数（α）小于其任意子节点的β值时，由于决策结点处于min层，所以该β不会对答案有贡献，所以不搜索剩下节点。</li>
+</ul>
+</li>
+</ol>
+<h3 id="3-4-棋局评价实现"><a href="#3-4-棋局评价实现" class="headerlink" title="3.4 棋局评价实现"></a>3.4 棋局评价实现</h3><p>&emsp;&emsp;该部分的主体思想已于2.3部分介绍，这里的实现就比较简单了。只需要将棋盘对象传入新生成的期盼评估类中，再调用棋盘评估方法分别评估棋力和控制力。</p>
+<ol>
+<li><p>棋力评估。使用2.3中的棋力数值进行加权求和即可。</p>
+</li>
+<li><p>控制力评估。分为执棋者与非执棋者，二者对于空格点的控制力相等且较小（取1），对控制点位外的敌方棋子取根号棋力乘轮次权重作为控制权值。</p>
+</li>
+</ol>
+<h2 id="四、中国象棋博弈程序分析"><a href="#四、中国象棋博弈程序分析" class="headerlink" title="四、中国象棋博弈程序分析"></a>四、中国象棋博弈程序分析</h2><p>&emsp;&emsp;关于本中国象棋博弈程序，ui制作上精致务实且借助unity平台可扩展性强大，下棋逻辑严格遵循中国象棋游戏规则，经大量对局表现并无疏漏。所以在本分析模块中，我将重点对AI和棋局评估部分进行分析。</p>
+<h3 id="4-1-本程序的不足"><a href="#4-1-本程序的不足" class="headerlink" title="4.1 本程序的不足"></a>4.1 本程序的不足</h3><ol>
+<li>反应时间较长，仍待优化。本中国象棋博弈程序使用的策略为minimax+alpha-beta剪枝，每策略节点对应4步普通博弈树搜索和1步棋局评价搜索，单步反应时间为1-5s(unity内运行时间)。每步搜索方法为遍历每个格点与其目的格点，即90x90，这里可以再后期添加归属list优化降低复杂度为14x90。</li>
+<li>评价函数不全面。关于棋局评价函数，这里也只是简单地考虑了棋力与控制力，结合博弈树，对于比较复杂的情况，如多子（4子以上）争同一点位所带来的换子问题考虑不够全面等。</li>
+</ol>
+<h3 id="4-2-本程序的优点"><a href="#4-2-本程序的优点" class="headerlink" title="4.2 本程序的优点"></a>4.2 本程序的优点</h3><ol>
+<li>切实行使对局义务。本程序AI体现了作为一名对局棋手应有的素质，即抓住对方失误逢子必吃、提前部署车炮等至有利位置、保护本方将帅并必要时舍弃其他棋子等。</li>
+<li>实战推动版本迭代。本程序已于微信小程序《天天象棋》进行多轮对局，并借助对局结果优化棋盘评估函数。已从最早的炮打底马版本经提早送棋保帅版本演替至现在能于专业小程序博弈至残局（35步以上）。棋局对弈示意图如Figure 2所示：</li>
+</ol>
+<center>
+    <img src=https://raw.githubusercontent.com/StarDream-x/PhotoTab/main/situationDemo_221004.png width="400">
+    <center>Figure 2</center>
+</center>
+
+<h2 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h2><p>&emsp;&emsp;在制作本中国象棋博弈程序的过程中，我从零开始地制作ui、gameplay框架，再到ai与棋盘评估，而整体耗时不足10小时。从大一1个月制作五子棋游戏到现在10小时之内制作中国象棋游戏，我切身体会到了自己工程水平的进步。另外，虽然不至于像五子棋程序那样有着相当高的强度，本象棋AI依然有着能与普通棋手相平的水平，甚至能与专业小程序级AI进行一定程度的博弈。</p>
+<p>&emsp;&emsp;最后，通过本中国象棋博弈程序，我实践了minimax与alpha-beta剪枝对于中国象棋的应用，深切体会了人工智能对于博弈研究所能达到的效果，即切身直接地体会了人工智能技术对人类技术的模拟。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p>[1]李然.人机大战话“深蓝”[J].科技潮,1997(06):63.</p>
+<p>[2]Fei-Yue Wang,Jun Jason Zhang,Xinhu Zheng,Xiao Wang,Yong Yuan,Xiaoxiao Dai,Jie Zhang,Liuqing Yang.Where Does AlphaGo Go: From Church-Turing Thesis to AlphaGo Thesis and Beyond[J].IEEE/CAA Journal of Automatica Sinica,2016,3(02):113-120.</p>
+<p>[3]icyChessZero</p>
+<p>[4]岳金朋,冯速.中国象棋Alpha-Beta搜索算法的研究与改进[J].北京师范大学学报(自然科学版),2009,45(02):156-160.</p>
+<p>[5]Monte Carlo Tree Search – beginners guide</p>
+<h2 id="代码附录"><a href="#代码附录" class="headerlink" title="代码附录"></a>代码附录</h2><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//部分AI代码</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> minmax dfs for alpha-beta version</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name=&quot;nState&quot;&gt;</span>alpha or beta state<span class="doctag">&lt;/param&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name=&quot;preW&quot;&gt;</span>parent&#x27;s alpha or beta<span class="doctag">&lt;/param&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name=&quot;dep&quot;&gt;</span>lasting dep for exploring<span class="doctag">&lt;/param&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;returns&gt;</span><span class="doctag">&lt;/returns&gt;</span></span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="built_in">int</span> <span class="title">getScore</span>(<span class="params"><span class="built_in">int</span> nState,<span class="built_in">int</span> preW,<span class="built_in">int</span> dep</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//Debug.Log(&quot;nState=&quot; + nState + &quot;  preW=&quot; + preW + &quot;  dep=&quot; + dep);</span></span><br><span class="line">        --dep;</span><br><span class="line">        <span class="keyword">if</span> (dep == <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            boardRater.setBoard(board);</span><br><span class="line">            boardRater.setGamePlay(gamePlay);</span><br><span class="line">            <span class="keyword">return</span> boardRater.rating(nState);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (nState == <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">int</span> alpha = -zwq;</span><br><span class="line">            <span class="keyword">for</span>(<span class="built_in">int</span> u=<span class="number">0</span>; u &lt; <span class="number">90</span>; ++u) <span class="keyword">if</span>(board[u].getBel() == nState &amp;&amp; board[u].getTp() &gt; <span class="number">0</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="built_in">int</span> v = <span class="number">0</span>; v &lt; <span class="number">90</span>; ++v) <span class="keyword">if</span> (gamePlay.checkAtt(u, v)) </span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="keyword">if</span> (board[v].getTp() == <span class="number">7</span>) <span class="keyword">return</span> zwq;</span><br><span class="line">                    Pawn pu = <span class="keyword">new</span> Pawn(board[u]);</span><br><span class="line">                    Pawn pv = <span class="keyword">new</span> Pawn(board[v]);</span><br><span class="line">                    board[v].setEx(board[u]);</span><br><span class="line">                    board[u].setEx();</span><br><span class="line">                    <span class="built_in">int</span> sonBeta = getScore(<span class="number">1</span>, alpha, dep);</span><br><span class="line">                    <span class="keyword">if</span> (sonBeta &gt; alpha) alpha = sonBeta;</span><br><span class="line">                    board[u] = pu;</span><br><span class="line">                    board[v] = pv;</span><br><span class="line">                    <span class="keyword">if</span> (alpha &gt; preW) <span class="keyword">return</span> alpha;<span class="comment">//alpha pruning</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> alpha;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">int</span> beta = zwq;</span><br><span class="line">            <span class="keyword">for</span> (<span class="built_in">int</span> u = <span class="number">0</span>; u &lt; <span class="number">90</span>; ++u) <span class="keyword">if</span>(board[u].getBel() == nState &amp;&amp; board[u].getTp() &gt; <span class="number">0</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">for</span>(<span class="built_in">int</span> v = <span class="number">0</span>; v &lt; <span class="number">90</span>; ++v) <span class="keyword">if</span>(gamePlay.checkAtt(u,v))</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="keyword">if</span> (board[v].getTp() == <span class="number">7</span>) <span class="keyword">return</span> -zwq;</span><br><span class="line">                    Pawn pu = <span class="keyword">new</span> Pawn(board[u]);</span><br><span class="line">                    Pawn pv = <span class="keyword">new</span> Pawn(board[v]);</span><br><span class="line">                    board[v].setEx(board[u]);</span><br><span class="line">                    board[u].setEx();</span><br><span class="line">                    <span class="built_in">int</span> sonAlpha = getScore(<span class="number">1</span>, beta, dep);</span><br><span class="line">                    <span class="keyword">if</span> (sonAlpha &lt; beta) beta = sonAlpha;</span><br><span class="line">                    board[u] = pu;</span><br><span class="line">                    board[v] = pv;</span><br><span class="line">                    <span class="keyword">if</span> (beta &lt; preW) <span class="keyword">return</span> beta;<span class="comment">//beta pruning</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> beta;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> AI play (minimax-alpha-beta version)</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;returns&gt;</span>board after playing<span class="doctag">&lt;/returns&gt;</span></span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Pawn&gt; <span class="title">play</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">int</span> gu = <span class="number">0</span>, gv = <span class="number">0</span>, mp = zwq;</span><br><span class="line">        <span class="keyword">for</span>(<span class="built_in">int</span> u=<span class="number">0</span>;u&lt;<span class="number">90</span>;++u) <span class="keyword">if</span>(board[u].getTp()&gt;<span class="number">0</span> &amp;&amp; board[u].getBel() == playState)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">foreach</span>(<span class="built_in">int</span> v <span class="keyword">in</span> board[u].proArea)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="keyword">if</span> (board[v].getTp() == <span class="number">7</span>)</span><br><span class="line">                    &#123;</span><br><span class="line">                        gu = u;</span><br><span class="line">                        gv = v;</span><br><span class="line">                        mp = -zwq;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    Pawn pu = <span class="keyword">new</span> Pawn(board[u]);</span><br><span class="line">                    Pawn pv = <span class="keyword">new</span> Pawn(board[v]);</span><br><span class="line">                    board[v].setEx(board[u]);</span><br><span class="line">                    board[u].setEx();</span><br><span class="line">                    <span class="built_in">int</span> nmp = getScore(playState ^ <span class="number">1</span>, mp, abDep);</span><br><span class="line">                    <span class="keyword">if</span> (nmp &lt; mp)</span><br><span class="line">                    &#123;</span><br><span class="line">                        mp = nmp;</span><br><span class="line">                        gu = u;</span><br><span class="line">                        gv = v;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span>(nmp == mp)</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="built_in">int</span> rand = Guid.NewGuid().GetHashCode() % rbase;</span><br><span class="line">                        <span class="keyword">if</span> (rand &lt; <span class="number">0</span>) rand += rbase;</span><br><span class="line">                        <span class="keyword">if</span> (rand &gt; <span class="number">6</span>) &#123; gu = u;gv = v; &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                    board[u] = pu;</span><br><span class="line">                    board[v] = pv;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (mp + zwq &lt;= <span class="number">0</span>) <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        board[gv].setEx(board[gu]);</span><br><span class="line">        board[gu].setEx();</span><br><span class="line">        <span class="keyword">return</span> board;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://stardream-x.github.io">starDream</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://stardream-x.github.io/2022/10/04/ChineseChess-by-Unity/">http://stardream-x.github.io/2022/10/04/ChineseChess-by-Unity/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://stardream-x.github.io" target="_blank">starDream's Blog!</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Unity/">Unity</a><a class="post-meta__tags" href="/tags/Alpha-beta-pruning/">Alpha-beta pruning</a><a class="post-meta__tags" href="/tags/CSharp/">CSharp</a></div><div class="post_share"><div class="social-share" data-image="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fbkimg.cdn.bcebos.com%2Fpic%2F9213b07eca8065386a75938197dda144ac348280&amp;refer=http%3A%2F%2Fbkimg.cdn.bcebos.com&amp;app=2002&amp;size=f9999,10000&amp;q=a80&amp;n=0&amp;g=0n&amp;fmt=auto?sec=1667406277&amp;t=52a28fa1328f8495e0f3946247c054fb" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/10/13/JavaEEnote4/"><img class="prev-cover" src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg-blog.csdnimg.cn%2Fimg_convert%2F6ee918ee96e7cde5c0ff80528c44df88.png&amp;refer=http%3A%2F%2Fimg-blog.csdnimg.cn&amp;app=2002&amp;size=f9999,10000&amp;q=a80&amp;n=0&amp;g=0n&amp;fmt=auto?sec=1668186790&amp;t=cb3b17e2b392903f44c08db698428954" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">JavaEEnote4</div></div></a></div><div class="next-post pull-right"><a href="/2022/09/27/JavaEEnote3/"><img class="next-cover" src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fstatic001.geekbang.org%2Finfoq%2F61%2F61d6ac3bd736f6dd270b578f2d62423e.jpeg&amp;refer=http%3A%2F%2Fstatic001.geekbang.org&amp;app=2002&amp;size=f9999,10000&amp;q=a80&amp;n=0&amp;g=0n&amp;fmt=auto?sec=1666803814&amp;t=81b757e2a80a2c6ce36f7dfd85d6ed1f" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">JavaEEnote3</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://avatars.githubusercontent.com/u/97537940?s=400&amp;u=4f23ac10b665da4eadc29cf4b757ff08ede9d9ba&amp;v=4" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">starDream</div><div class="author-info__description">A BRAND NEW BLOG</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">11</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/StarDream-x"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">All pictures inside posts have been removed to github, thus you need to make sure that you can be access to github if you want to see them.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">中国象棋博弈程序的实现</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9B%B6%E3%80%81%E5%85%B3%E4%BA%8E%E6%9C%AC%E4%B8%AD%E5%9B%BD%E8%B1%A1%E6%A3%8B%E5%8D%9A%E5%BC%88%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.1.</span> <span class="toc-text">零、关于本中国象棋博弈程序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%A6%82%E8%BF%B0"><span class="toc-number">1.2.</span> <span class="toc-text">一、概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E4%B8%AD%E5%9B%BD%E8%B1%A1%E6%A3%8B%E5%8D%9A%E5%BC%88%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%91%E6%84%8F%E4%B9%89"><span class="toc-number">1.2.1.</span> <span class="toc-text">1.1 中国象棋博弈程序开发意义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E4%B8%AD%E5%9B%BD%E8%B1%A1%E6%A3%8B%E5%8D%9A%E5%BC%88%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%91%E7%8E%B0%E7%8A%B6"><span class="toc-number">1.2.2.</span> <span class="toc-text">1.2 中国象棋博弈程序开发现状</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E6%9C%AC%E5%8D%9A%E5%BC%88%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%BC%80%E5%8F%91%E8%83%8C%E6%99%AF"><span class="toc-number">1.2.3.</span> <span class="toc-text">1.3 本博弈程序的开发背景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%B8%AD%E5%9B%BD%E8%B1%A1%E6%A3%8B%E5%8D%9A%E5%BC%88%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="toc-number">1.3.</span> <span class="toc-text">二、中国象棋博弈程序的基本原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E4%B8%AD%E5%9B%BD%E8%B1%A1%E6%A3%8B%E4%B8%8B%E6%A3%8B%E6%80%9D%E7%BB%B4"><span class="toc-number">1.3.1.</span> <span class="toc-text">2.1 中国象棋下棋思维</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E4%B8%AD%E5%9B%BD%E8%B1%A1%E6%A3%8B%E5%8D%9A%E5%BC%88%E7%9A%84%E8%A1%A8%E7%A4%BA"><span class="toc-number">1.3.2.</span> <span class="toc-text">2.2 中国象棋博弈的表示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E4%B8%AD%E5%9B%BD%E8%B1%A1%E6%A3%8B%E5%8D%9A%E5%BC%88%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="toc-number">1.3.3.</span> <span class="toc-text">2.3 中国象棋博弈程序的核心思想</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E4%B8%AD%E5%9B%BD%E8%B1%A1%E6%A3%8B%E5%8D%9A%E5%BC%88%E7%AE%97%E6%B3%95%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.4.</span> <span class="toc-text">三、中国象棋博弈算法的实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-UI%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.4.1.</span> <span class="toc-text">3.1 UI实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E4%B8%8B%E6%A3%8B%E9%80%BB%E8%BE%91%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.4.2.</span> <span class="toc-text">3.2 下棋逻辑实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-AI%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.4.3.</span> <span class="toc-text">3.3 AI实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E6%A3%8B%E5%B1%80%E8%AF%84%E4%BB%B7%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.4.4.</span> <span class="toc-text">3.4 棋局评价实现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E4%B8%AD%E5%9B%BD%E8%B1%A1%E6%A3%8B%E5%8D%9A%E5%BC%88%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90"><span class="toc-number">1.5.</span> <span class="toc-text">四、中国象棋博弈程序分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E6%9C%AC%E7%A8%8B%E5%BA%8F%E7%9A%84%E4%B8%8D%E8%B6%B3"><span class="toc-number">1.5.1.</span> <span class="toc-text">4.1 本程序的不足</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E6%9C%AC%E7%A8%8B%E5%BA%8F%E7%9A%84%E4%BC%98%E7%82%B9"><span class="toc-number">1.5.2.</span> <span class="toc-text">4.2 本程序的优点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%80%BB%E7%BB%93"><span class="toc-number">1.6.</span> <span class="toc-text">五、总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="toc-number">1.7.</span> <span class="toc-text">参考文献</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E9%99%84%E5%BD%95"><span class="toc-number">1.8.</span> <span class="toc-text">代码附录</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/10/22/GA-and-Improvements/" title="GA and Improvements"><img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fspider.nosdn.127.net%2F72ebcd90933d092d604f54901dd0a49d.jpeg&amp;refer=http%3A%2F%2Fspider.nosdn.127.net&amp;app=2002&amp;size=f9999,10000&amp;q=a80&amp;n=0&amp;g=0n&amp;fmt=auto?sec=1669053287&amp;t=1d7ab478a50c758644202f38cd53615d" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="GA and Improvements"/></a><div class="content"><a class="title" href="/2022/10/22/GA-and-Improvements/" title="GA and Improvements">GA and Improvements</a><time datetime="2022-10-22T13:03:19.000Z" title="发表于 2022-10-22 21:03:19">2022-10-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/15/UE4-FPS%E9%A1%B9%E7%9B%AE%E5%88%86%E6%9E%90%E6%8A%A5%E5%91%8A/" title="UE4-FPS项目分析报告"><img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fp0.itc.cn%2Fimages01%2F20210127%2F1ceab375995447f0bed9cad32835bf50.jpeg&amp;refer=http%3A%2F%2Fp0.itc.cn&amp;app=2002&amp;size=f9999,10000&amp;q=a80&amp;n=0&amp;g=0n&amp;fmt=auto?sec=1668425481&amp;t=086ef0e74d4b9d49c87dde9206b58578" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="UE4-FPS项目分析报告"/></a><div class="content"><a class="title" href="/2022/10/15/UE4-FPS%E9%A1%B9%E7%9B%AE%E5%88%86%E6%9E%90%E6%8A%A5%E5%91%8A/" title="UE4-FPS项目分析报告">UE4-FPS项目分析报告</a><time datetime="2022-10-15T11:23:43.000Z" title="发表于 2022-10-15 19:23:43">2022-10-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/13/JavaEEnote4/" title="JavaEEnote4"><img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg-blog.csdnimg.cn%2Fimg_convert%2F6ee918ee96e7cde5c0ff80528c44df88.png&amp;refer=http%3A%2F%2Fimg-blog.csdnimg.cn&amp;app=2002&amp;size=f9999,10000&amp;q=a80&amp;n=0&amp;g=0n&amp;fmt=auto?sec=1668186790&amp;t=cb3b17e2b392903f44c08db698428954" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="JavaEEnote4"/></a><div class="content"><a class="title" href="/2022/10/13/JavaEEnote4/" title="JavaEEnote4">JavaEEnote4</a><time datetime="2022-10-12T17:03:27.000Z" title="发表于 2022-10-13 01:03:27">2022-10-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/04/ChineseChess-by-Unity/" title="ChineseChess by Unity"><img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fbkimg.cdn.bcebos.com%2Fpic%2F9213b07eca8065386a75938197dda144ac348280&amp;refer=http%3A%2F%2Fbkimg.cdn.bcebos.com&amp;app=2002&amp;size=f9999,10000&amp;q=a80&amp;n=0&amp;g=0n&amp;fmt=auto?sec=1667406277&amp;t=52a28fa1328f8495e0f3946247c054fb" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ChineseChess by Unity"/></a><div class="content"><a class="title" href="/2022/10/04/ChineseChess-by-Unity/" title="ChineseChess by Unity">ChineseChess by Unity</a><time datetime="2022-10-03T16:20:02.000Z" title="发表于 2022-10-04 00:20:02">2022-10-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/09/27/JavaEEnote3/" title="JavaEEnote3"><img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fstatic001.geekbang.org%2Finfoq%2F61%2F61d6ac3bd736f6dd270b578f2d62423e.jpeg&amp;refer=http%3A%2F%2Fstatic001.geekbang.org&amp;app=2002&amp;size=f9999,10000&amp;q=a80&amp;n=0&amp;g=0n&amp;fmt=auto?sec=1666803814&amp;t=81b757e2a80a2c6ce36f7dfd85d6ed1f" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="JavaEEnote3"/></a><div class="content"><a class="title" href="/2022/09/27/JavaEEnote3/" title="JavaEEnote3">JavaEEnote3</a><time datetime="2022-09-26T17:01:22.000Z" title="发表于 2022-09-27 01:01:22">2022-09-27</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By starDream</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.2
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container:not\([display]\)').forEach(node => {
+            const target = node.parentNode
+            if (target.nodeName.toLowerCase() === 'li') {
+              target.parentNode.classList.add('has-jax')
+            } else {
+              target.classList.add('has-jax')
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js"></script><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', { class: 'katex-wrap'})
+  })
+})()</script></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>
